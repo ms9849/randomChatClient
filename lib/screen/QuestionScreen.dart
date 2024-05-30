@@ -55,50 +55,55 @@ class QuestionList extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                    padding: EdgeInsets.only(top: 10),
-                    margin: EdgeInsets.only(bottom: 60),
-                    constraints: BoxConstraints(
+                    padding: const EdgeInsets.only(top: 10),
+                    margin: const EdgeInsets.only(bottom: 60),
+                    constraints: const BoxConstraints(
                       minWidth: 500,
                       minHeight: 200,
                     ),
                     decoration: BoxDecoration(
-                      color: Color(0xffe8edf7),
+                      color: const Color(0xffe8edf7),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Column(children: [
                       Text(
                         "질문 $index.\n",
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 24.0, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
                       ),
                       Text(
                         question,
-                        style: TextStyle(fontSize: 24.0),
+                        style: const TextStyle(fontSize: 24.0),
                         textAlign: TextAlign.center,
                       ),
-                    ])),
+                    ])
+                ),
                 Column(
                   children: [
-                    Container(
+                    SizedBox(
                       width: 380,
                       child: ElevatedButton(
                           onPressed: () => {nextQuestion(0)},
-                          child: Text("네",
-                              style:
-                                  TextStyle(fontSize: 19, color: Colors.white)),
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xff008000))),
+                              backgroundColor: const Color(0xff008000)),
+                          child: const Text("네",
+                              style: TextStyle(
+                                  fontSize: 19, color: Colors.white)
+                          )
+                      ),
                     ),
-                    Container(
+                    SizedBox(
                       width: 380,
                       child: ElevatedButton(
                           onPressed: () => {nextQuestion(1)},
-                          child: Text("아니오",
-                              style:
-                                  TextStyle(fontSize: 19, color: Colors.white)),
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xff008000))),
+                              backgroundColor: const Color(0xff008000)),
+                          child: const Text("아니오",
+                              style: TextStyle(
+                                  fontSize: 19, color: Colors.white)
+                          )
+                      ),
                     )
                   ],
                 )

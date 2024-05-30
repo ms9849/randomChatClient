@@ -2,7 +2,7 @@
 
 int setAnimal(List<int> responses) {
   int result = 0;
-  for(int i=0; i<responses.length; i++) {
+  for (int i = 0; i < responses.length; i++) {
     result += responses[i];
   }
   return result;

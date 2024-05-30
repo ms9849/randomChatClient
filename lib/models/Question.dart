@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 class Question extends ChangeNotifier {
   List<int> _responses = [];
-
   List<int> get responses => _responses;
 
   void setResponse(int index, int response) {

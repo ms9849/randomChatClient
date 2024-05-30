@@ -1,6 +1,6 @@
 # random_chat
 
-A new Flutter project.
+단국대학교 2024년 1학기 모바일플랫폼 기말 프로젝트
 
 ## Getting Started
 

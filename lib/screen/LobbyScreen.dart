@@ -7,7 +7,6 @@ import 'ChatRoomScreen.dart';
 import '../models/Question.dart';
 import '../widgets/AppBarHeader.dart';
 import '../utils/setAnimal.dart';
-import '../models/Animal.dart';
 import '../utils/getAnimalName.dart';
 
 class LobbyScreen extends StatefulWidget {
@@ -17,11 +16,13 @@ class LobbyScreen extends StatefulWidget {
 }
 
 class LobbyScreenState extends State<LobbyScreen> {
+  String serverIP = 'http://34.125.192.212:3000';
   bool isMatching = false;
+  List<String> animal = ["dog", "cat","bird", "fish"];
 
   Widget build(BuildContext context) {
     TextEditingController nicknameController = TextEditingController();
-    final IO.Socket socket = IO.io('http://10.0.2.2:3000', <String, dynamic>{
+    final IO.Socket socket = IO.io(serverIP, <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
       'reconnection': false
@@ -32,21 +33,14 @@ class LobbyScreenState extends State<LobbyScreen> {
 
     void matchQuit() {
       socket.emit('matchQuit');
-
       Fluttertoast.showToast(
-          msg: "매칭을 시작합니다...",
-          //메세지입력
-          toastLength: Toast.LENGTH_SHORT,
-          //메세지를 보여주는 시간(길이)
-          gravity: ToastGravity.CENTER,
-          //위치지정
-          backgroundColor: Colors.black,
-          //배경색
-          textColor: Colors.white,
-          //글자색
-          fontSize: 20.0 //폰트사이즈
-          );
-
+        msg: "매칭을 취소했습니다.",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 20.0
+      );
       socket.close();
       setState(() {
         isMatching = false;
@@ -56,39 +50,37 @@ class LobbyScreenState extends State<LobbyScreen> {
     void matchStart() {
       // 이 부분에 애니메이션 구현
       String usersNickname = nicknameController.text.trim();
-      if (usersNickname == "") return;
+      if (usersNickname == "") {
+        Fluttertoast.showToast(
+            msg: "닉네임을 빈칸으로 지정할 수 없습니다.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            backgroundColor: Colors.black,
+            textColor: Colors.white,
+            fontSize: 20.0
+        );
+        return;
+      }
 
       Fluttertoast.showToast(
-          msg: "매칭을 시작합니다...",
-          //메세지입력
-          toastLength: Toast.LENGTH_SHORT,
-          //메세지를 보여주는 시간(길이)
-          gravity: ToastGravity.CENTER,
-          //위치지정
-          backgroundColor: Colors.black,
-          //배경색
-          textColor: Colors.white,
-          //글자색
-          fontSize: 20.0 //폰트사이즈
-          );
+        msg: "매칭을 시작합니다...",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 20.0
+      );
 
       socket.connect(); // 서버 연결
       socket.emit('matchStart');
       setState(() {
         isMatching = true;
       });
-      socket.on(
-          'matchFound',
-          (_) => {
-                if (context.mounted)
-                  {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ChatRoomScreen(
-                                socket, usersAnimal, usersNickname))),
-                  }
-              });
+      socket.on('matchFound', (_) => {
+        if (context.mounted) {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ChatRoomScreen(socket, usersAnimal, usersNickname))),
+          }
+      });
     }
 
     return Scaffold(
@@ -97,12 +89,14 @@ class LobbyScreenState extends State<LobbyScreen> {
       body: Column(
         children: [
           Container(
-              margin: EdgeInsets.only(top: 30),
-              padding: EdgeInsets.all(10.0),
+              margin: const EdgeInsets.only(top: 30),
+              padding: const EdgeInsets.all(10.0),
               child: const Text("프로필 이미지가 설정되었습니다!\n\n당신과 어울리는 동물은\n",
-                  textAlign: TextAlign.center, style: TextStyle(fontSize: 20))),
+                  textAlign: TextAlign.center, style: TextStyle(fontSize: 20)
+              )
+          ),
           /*
-          * 3항 연산자로 나타낸, 동물의 아이콘 출력파트
+          * 동물 아이콘 출력 파트. 3항 연산자로 알맞은 동물을 출력하게 한다.
           * */
           usersAnimal == animal[0]
               ? const FaIcon(FontAwesomeIcons.dog, size: 80)
@@ -112,7 +106,7 @@ class LobbyScreenState extends State<LobbyScreen> {
                       ? const FaIcon(FontAwesomeIcons.kiwiBird, size: 80)
                       : const FaIcon(FontAwesomeIcons.fish, size: 80),
           Container(
-            margin: EdgeInsets.only(bottom: 20),
+            margin: const EdgeInsets.only(bottom: 20),
             child: Text("$animalName\n",
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 20)),
@@ -129,7 +123,8 @@ class LobbyScreenState extends State<LobbyScreen> {
                     borderSide: BorderSide(color: Color(0xff008000)),
                   ),
                 ),
-              )),
+              )
+          ),
           Visibility(
               visible: !isMatching,
               child: ElevatedButton(
@@ -137,17 +132,21 @@ class LobbyScreenState extends State<LobbyScreen> {
                     matchStart();
                   },
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xff008000)),
-                  child: Text("매칭 시작",
-                      style: TextStyle(fontSize: 19, color: Colors.white)))),
+                      backgroundColor: const Color(0xff008000)),
+                  child: const Text("매칭 시작",
+                      style: TextStyle(fontSize: 19, color: Colors.white))
+              )
+          ),
           Visibility(
               visible: isMatching,
               child: ElevatedButton(
                   onPressed: matchQuit,
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xffFF8A80)),
-                  child: Text("매칭 취소",
-                      style: TextStyle(fontSize: 19, color: Colors.white))))
+                      backgroundColor: const Color(0xffFF8A80)),
+                  child: const Text("매칭 취소",
+                      style: TextStyle(fontSize: 19, color: Colors.white))
+              )
+          )
         ],
       ),
     );

@@ -97,70 +97,79 @@ class ChatRoomScreenState extends State<ChatRoomScreen> {
             controller: scrollController,
             itemCount: messages.length,
             itemBuilder: (BuildContext context, int index) {
-              return messages[index].sender == widget.socket.id
-                  ? ListTile(
-                      title: Align(
-                          alignment: Alignment.centerRight,
-                          child: Container(
-                            margin: const EdgeInsets.only(bottom: 5),
-                            padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                            constraints: const BoxConstraints(maxWidth: 320),
-                            decoration: BoxDecoration(
-                              color: Color(0xffA0D468),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Text(messages[index].message,
-                                textAlign: TextAlign.left,
-                                style: TextStyle(fontSize: 17)),
-                          )))
-                  : messages[index].sender == "system"
-                      ? ListTile(
-                          title: Text(messages[index].message,
-                              textAlign: TextAlign.center),
-                        )
-                      : ListTile(
-                          titleAlignment: ListTileTitleAlignment.top,
-                          horizontalTitleGap: 10,
-                          leading: CircleAvatar(
-                              child: getIcon(messages[index].animal),
-                              backgroundColor: Color(0xffB8CCA3)),
-                          title: Text(" ${messages[index].nickname}",
+              if(messages[index].sender == widget.socket.id) { // 사용자 자신이 보낸 메세지
+                return ListTile(
+                    title: Align(
+                        alignment: Alignment.centerRight,
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: 5),
+                          padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                          constraints: const BoxConstraints(maxWidth: 320),
+                          decoration: BoxDecoration(
+                            color: const Color(0xffA0D468),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(messages[index].message,
                               textAlign: TextAlign.left,
-                              style: TextStyle(fontSize: 14)),
-                          subtitle: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Container(
-                                margin: const EdgeInsets.only(bottom: 5),
-                                padding:
-                                    const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                                constraints: BoxConstraints(maxWidth: 320),
-                                decoration: BoxDecoration(
-                                  color: Color(0xffe9ecef),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Text(messages[index].message,
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(fontSize: 17))),
-                          ));
+                              style: const TextStyle(fontSize: 17)),
+                        )
+                    )
+                );
+              }
+              else if(messages[index].sender == "system") { // 시스템이 보낸 메세지
+                return ListTile(
+                  title: Text(messages[index].message,
+                      textAlign: TextAlign.center),
+                );
+              }
+              else { // 상대방이 보낸 메세지
+                return ListTile(
+                    titleAlignment: ListTileTitleAlignment.top,
+                    horizontalTitleGap: 10,
+                    leading: CircleAvatar(
+                        backgroundColor: const Color(0xffB8CCA3),
+                        child: getIcon(messages[index].animal)),
+                    title: Text(" ${messages[index].nickname}",
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(fontSize: 14)),
+                    subtitle: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                          margin: const EdgeInsets.only(bottom: 5),
+                          padding:
+                          const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                          constraints:
+                          const BoxConstraints(maxWidth: 320),
+                          decoration: BoxDecoration(
+                            color: const Color(0xffe9ecef),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(messages[index].message,
+                              textAlign: TextAlign.left,
+                              style: const TextStyle(fontSize: 17))),
+                    )
+                );
+              }
             },
           )),
           Row(
             children: [
               Expanded(
-                  child: Container(
-                margin: EdgeInsets.only(left: 5),
-                child: TextField(
-                  controller: messageController,
-                  decoration: InputDecoration(
-                    hintText: '메세지를 입력하세요',
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xff008000)),
+                child: Container(
+                  margin: const EdgeInsets.only(left: 5),
+                  child: TextField(
+                    controller: messageController,
+                    decoration: const InputDecoration(
+                      hintText: '메세지를 입력하세요',
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xff008000)),
+                      ),
                     ),
                   ),
                 ),
-              )),
+              ),
               IconButton(
-                icon: Icon(Icons.send),
+                icon: const Icon(Icons.send),
                 onPressed: sendMessage,
               ),
             ],
