@@ -1,16 +1,13 @@
-# random_chat
+# 동물 랜덤채팅 어플리케이션
 
-2024년 1학기 모바일플랫폼 기말 프로젝트
+### Frond-end: Flutter    
+   
+### Back-end: Node.js, Express
 
-## Getting Started
+단국대학교 24년 1학기 모바일 플랫폼 기말 프로젝트로 제작한 랜덤 채팅 애플리케이션 입니다.
 
-This project is a starting point for a Flutter application.
+사용자는 간단한 질문 (3가지)를 통해 자신에게 어울리는 동물 이미지 (개, 고양이, 새, 물고기) 중 하나를 배정 받습니다.
 
-A few resources to get you started if this is your first Flutter project:
+실시간 통신을 위해 웹소켓 기반의 Socket.io를 활용했습니다.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+추후 여유가 된다면 서버 동기화를 위해 락스텝 구조를 적용해볼 계획입니다.
